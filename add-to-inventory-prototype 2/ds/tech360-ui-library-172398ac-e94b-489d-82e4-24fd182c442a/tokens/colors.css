@@ -1,0 +1,81 @@
+/* Tech360 UI Library — core palette.
+   Values transcribed verbatim from the "📓 TECH360 UI Library - Color" page.
+   The page groups colors by how much to use them: Heavily / Sparingly / Rarely. */
+
+:root{
+  /* ── Primary (use heavily) ───────────────────────────────── */
+  --t360-black:#000000;                 /* R0 G0 B0 */
+  --t360-white:#FFFFFF;                 /* R255 G255 B255 */
+  --t360-blue:#0272B6;                  /* Tech 360 Blue — R2 G114 B182 */
+  --t360-blue-link:#017BFF;             /* Blue links */
+  --t360-blue-link-ios:#007AFF;         /* iOS system link blue */
+
+  /* ── Neutrals (use sparingly) ────────────────────────────── */
+  --t360-grey-secondary:#767676;        /* Secondary grey — body de-emphasis */
+  --t360-grey-caption:#969696;          /* Caption grey */
+  --t360-grey-9d:#9D9D9D;               /* hairline / stroke grey */
+  --t360-grey-a7:#A7A7A7;
+  --t360-grey-d1:#D1D1D1;               /* card + insert border */
+  --t360-grey-d9:#D9D9D9;
+  --t360-grey-e8:#E8E8E8;               /* disabled button fill */
+  --t360-grey-f2:#F2F2F2;               /* insert / page wash */
+  --t360-grey-f8:#F8F8F8;               /* subtle surface */
+  --t360-ink-17:#171717;                /* near-black text */
+  --t360-ink-29:#292929;
+  --t360-ink-46:#464646;
+
+  /* ── Alert / tertiary (use rarely) ───────────────────────── */
+  --t360-success:#058040;               /* Success */
+  --t360-warning:#FFA700;               /* Warning — never used behind white text */
+  --t360-error:#C90318;                 /* Fail */
+  --t360-alert-red:#C90318;
+  --t360-alert-yellow:#FFA700;
+  --t360-alert-green:#058040;
+  --t360-purple:#9747FF;                /* annotation / flow-notation purple */
+  --t360-sky:#2B9CD8;                   /* secondary accent blue */
+  --t360-sky-2:#2EA0DD;
+
+  /* ── Semantic aliases ────────────────────────────────────── */
+  --text-primary:var(--t360-black);
+  --text-secondary:var(--t360-grey-secondary);
+  --text-caption:var(--t360-grey-caption);
+  --text-inverse:var(--t360-white);
+  --text-link:var(--t360-blue-link);
+  --text-theme:var(--t360-blue);
+  --text-disabled:var(--t360-grey-secondary);
+  --text-error:var(--t360-error);
+  --text-success:var(--t360-success);
+
+  --surface-page:var(--t360-white);
+  --surface-wash:var(--t360-grey-f2);
+  --surface-card:var(--t360-white);
+  --surface-subtle:var(--t360-grey-f8);
+  --surface-inverse:var(--t360-black);
+  --surface-disabled:var(--t360-grey-e8);
+
+  --border-hairline:var(--t360-grey-d1);
+  --border-strong:var(--t360-grey-9d);
+  --border-focus:var(--t360-blue);
+
+  --fill-theme:var(--t360-blue);
+  --fill-neutral:var(--t360-grey-secondary);
+  --fill-success:var(--t360-success);
+  --fill-warning:var(--t360-warning);
+  --fill-error:var(--t360-error);
+
+  /* ── Dark mode surfaces (from the Color page's dark-mode notes) ── */
+  --surface-dark-page:var(--t360-black);
+  --surface-dark-gradient:linear-gradient(180deg,#0B2135 0%,#000000 100%);
+}
+
+/* Dark theme scope: apply data-theme="dark" on a container. */
+[data-theme="dark"]{
+  --text-primary:var(--t360-white);
+  --text-secondary:var(--t360-grey-d1);
+  --text-caption:var(--t360-grey-9d);
+  --text-inverse:var(--t360-black);
+  --surface-page:var(--t360-black);
+  --surface-card:#171717;
+  --surface-wash:#171717;
+  --border-hairline:#464646;
+}

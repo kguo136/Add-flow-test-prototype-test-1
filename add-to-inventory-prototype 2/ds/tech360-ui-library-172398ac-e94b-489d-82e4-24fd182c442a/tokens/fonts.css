@@ -1,0 +1,22 @@
+/* Tech360 UI Library — webfonts.
+   The Figma file specifies four families:
+     • DM Sans            — the UI workhorse (buttons, labels, body, captions)
+     • XFINITY Standard TT — Xfinity brand face used in list rows and device UI
+     • Xfinity Brown       — Xfinity display/brand face (headlines, big numerals)
+     • Helvetica Neue / SF Pro / SF Mono — iOS system faces in the iOS-UI page
+   Only DM Sans is publicly distributable. XFINITY Standard TT and Xfinity Brown
+   are licensed Comcast faces and are NOT bundled here — see readme.md
+   "Font substitutions". They resolve to DM Sans until the real files are added. */
+
+@font-face{font-family:"DM Sans";src:url("../../../vendor/fonts/dm-sans-latin-wght-normal.woff2") format("woff2-variations");font-weight:100 1000;font-style:normal;font-display:swap}
+@font-face{font-family:"DM Sans";src:url("../../../vendor/fonts/dm-sans-latin-wght-italic.woff2") format("woff2-variations");font-weight:100 1000;font-style:italic;font-display:swap}1,9..40,100..1000&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Inter:wght@100..900&family=Roboto:wght@100..900&display=swap');
+
+/* Drop real .woff2 files into assets/fonts/ and these rules pick them up.
+   Until then the src fails and the fallback stack in --font-brand / --font-xfinity applies. */
+@font-face{font-family:"XFINITY Standard TT";src:url("../assets/fonts/XfinityStandard-Light.woff2") format("woff2");font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:"XFINITY Standard TT";src:url("../assets/fonts/XfinityStandard-Regular.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"XFINITY Standard TT";src:url("../assets/fonts/XfinityStandard-Medium.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:"XFINITY Standard TT";src:url("../assets/fonts/XfinityStandard-Bold.woff2") format("woff2");font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:"Xfinity Brown";src:url("../assets/fonts/XfinityBrown-Light.woff2") format("woff2");font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:"Xfinity Brown";src:url("../assets/fonts/XfinityBrown-Regular.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Xfinity Brown";src:url("../assets/fonts/XfinityBrown-Bold.woff2") format("woff2");font-weight:700;font-style:normal;font-display:swap}

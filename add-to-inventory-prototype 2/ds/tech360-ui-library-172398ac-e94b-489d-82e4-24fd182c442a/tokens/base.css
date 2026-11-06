@@ -1,0 +1,6 @@
+/* Minimal element defaults so consumers inherit the brand voice. */
+:root{color-scheme:light}
+body{font-family:var(--font-ui);color:var(--text-primary);background:var(--surface-page)}
+a{color:var(--text-link);text-decoration:none}
+a:hover{color:var(--t360-blue);text-decoration:underline}
+a:active{color:var(--t360-blue)}

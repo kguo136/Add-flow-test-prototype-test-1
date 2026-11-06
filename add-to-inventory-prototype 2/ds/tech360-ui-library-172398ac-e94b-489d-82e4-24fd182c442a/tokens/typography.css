@@ -1,0 +1,39 @@
+/* Tech360 UI Library — type.
+   The Figma file defines NO named Figma text styles; the scale below is
+   transcribed from the literal font/size/line-height/letter-spacing values
+   found across the component set (see readme.md → Visual Foundations). */
+
+:root{
+  --font-ui:"DM Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; /* @kind font */
+  --font-xfinity:"XFINITY Standard TT","DM Sans",-apple-system,BlinkMacSystemFont,Arial,sans-serif; /* @kind font */
+  --font-brand:"Xfinity Brown","DM Sans",-apple-system,BlinkMacSystemFont,Arial,sans-serif; /* @kind font */
+  --font-system:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif; /* @kind font */
+  --font-mono:"SF Mono",ui-monospace,SFMono-Regular,Menlo,monospace; /* @kind font */
+
+  --fw-light:300; /* @kind font */
+  --fw-regular:400; /* @kind font */
+  --fw-medium:500; /* @kind font */
+  --fw-bold:700; /* @kind font */
+
+  /* Sizes seen in the file, verbatim */
+  --fs-9:9px;   --fs-10:10px; --fs-12:12px; --fs-13:13px; --fs-14:14px; /* @kind spacing */
+  --fs-15:15px; --fs-16:16px; --fs-17:17px; --fs-18:18px; --fs-20:20px; /* @kind spacing */
+  --fs-21:21px; --fs-22:22px; --fs-23:23px; --fs-24:24px; --fs-32:32px; /* @kind spacing */
+  --fs-34:34px; --fs-36:36px; --fs-52:52px; --fs-64:64px; /* @kind spacing */
+
+  --lh-tight:100%; /* @kind spacing */
+  --lh-16:16px; --lh-20:20px; --lh-24:24px; /* @kind spacing */
+
+  --ls-button:0.010em; /* @kind font */
+}
+
+/* Named roles — the recurring combinations in the kit. */
+.t360-display{font-family:var(--font-brand);font-weight:var(--fw-light);font-size:var(--fs-34);line-height:1.15;color:var(--text-primary)}
+.t360-headline{font-family:var(--font-brand);font-weight:var(--fw-bold);font-size:var(--fs-24);line-height:1.2;color:var(--text-primary)}
+.t360-title{font-family:var(--font-brand);font-weight:var(--fw-bold);font-size:var(--fs-18);line-height:1.3;color:var(--text-primary)}
+.t360-body{font-family:var(--font-ui);font-weight:var(--fw-regular);font-size:var(--fs-16);line-height:var(--lh-24);color:var(--text-primary)}
+.t360-body-sm{font-family:var(--font-ui);font-weight:var(--fw-regular);font-size:var(--fs-14);line-height:var(--lh-20);color:var(--text-primary)}
+.t360-label{font-family:var(--font-ui);font-weight:var(--fw-bold);font-size:var(--fs-16);line-height:var(--lh-24);letter-spacing:var(--ls-button)}
+.t360-caption{font-family:var(--font-ui);font-weight:var(--fw-regular);font-size:var(--fs-12);line-height:var(--lh-16);color:var(--text-caption)}
+.t360-tag{font-family:var(--font-ui);font-weight:var(--fw-bold);font-size:var(--fs-12);line-height:var(--lh-16)}
+.t360-device{font-family:var(--font-xfinity);font-weight:var(--fw-regular);font-size:var(--fs-16);line-height:var(--lh-tight)}

@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Add to inventory test prototype</title>
+<script>window.__resources={"https://unpkg.com/react@18.3.1/umd/react.production.min.js":"vendor/react.production.min.js","https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js":"vendor/react-dom.production.min.js","https://unpkg.com/@babel/standalone@7.29.0/babel.min.js":"vendor/babel.min.js"};</script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="ds/tech360-ui-library-172398ac-e94b-489d-82e4-24fd182c442a/tokens/fonts.css">
+<link rel="stylesheet" href="ds/tech360-ui-library-172398ac-e94b-489d-82e4-24fd182c442a/tokens/colors.css">
+<link rel="stylesheet" href="ds/tech360-ui-library-172398ac-e94b-489d-82e4-24fd182c442a/tokens/typography.css">
+<link rel="stylesheet" href="ds/tech360-ui-library-172398ac-e94b-489d-82e4-24fd182c442a/tokens/layout.css">
+<link rel="stylesheet" href="ds/tech360-ui-library-172398ac-e94b-489d-82e4-24fd182c442a/tokens/fig-tokens.css">
+<link rel="stylesheet" href="ds/tech360-ui-library-172398ac-e94b-489d-82e4-24fd182c442a/tokens/fig-typography.css">
+<link rel="stylesheet" href="kit/fig-tokens-kit.css">
+<link rel="stylesheet" href="kit/fig-assets.css">
+<link rel="stylesheet" href="ds/tech360-ui-library-172398ac-e94b-489d-82e4-24fd182c442a/tokens/base.css">
+<link rel="stylesheet" href="ds/tech360-ui-library-172398ac-e94b-489d-82e4-24fd182c442a/styles.css">
+<script src="ds/tech360-ui-library-172398ac-e94b-489d-82e4-24fd182c442a/_ds_bundle.js"></script>
+<style>
+html,body{margin:0;background:#E8E8E8;font-family:'DM Sans',-apple-system,Arial,sans-serif;touch-action:manipulation;-webkit-tap-highlight-color:transparent;overscroll-behavior:none}
+a{color:#017BFF;text-decoration:none}
+.tp-stage{min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box}
+.tp-phone{position:relative;width:375px;height:812px;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow:hidden;background:#000000;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,0.18)}
+@media (max-width:520px){
+  .tp-stage{display:block;padding:0;min-height:0}
+  .tp-phone{width:100vw;height:100vh;height:100dvh;max-height:none;border-radius:0;box-shadow:none}
+}
+.tp-scroll::-webkit-scrollbar{display:none}
+@keyframes stripIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes toastIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes dcSpin{to{transform:rotate(360deg)}}
+@keyframes sheetIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes ishSheet{from{transform:translateY(100%)}to{transform:translateY(0)}}
+</style>
+</helmet>
+<div class="tp-stage">
+<div class="tp-phone" data-phone="add-test">
+
+<!-- ================= INVENTORY LANDING ================= -->
+<sc-if value="{{ invScreen }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="Inventory" style="position:absolute;inset:0;background:#FFFFFF">
+<div class="tp-scroll" style="position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;display:flex;flex-direction:column;align-items:stretch">
+  <div style="position:sticky;top:0;z-index:10;display:flex;flex-direction:column;flex-shrink:0;background-color:#FFFFFF">
+    <x-import component-from-global-scope="T360Kit.TitleBarIOS26" from="./kit/inventory-kit.jsx" time="3:29" title="Inventory" style="position:relative;width:auto;height:114px;flex-shrink:0;align-self:stretch" hint-size="100%,114px"></x-import>
+    <button onClick="{{ openMenu }}" aria-label="Contextual menu" style="position:absolute;right:10px;top:51px;width:44px;height:44px;border:none;background:transparent;cursor:pointer;z-index:2"></button>
+    <x-import component-from-global-scope="T360Tabs" from="./kit/Tabs.jsx" hint-size="100%,58px">
+      <sc-for list="{{ invTabs }}" as="tab" hint-placeholder-count="3">
+        <x-import component-from-global-scope="T360Tab" from="./kit/Tabs.jsx" selected="{{ tab.selected }}" on-click="{{ tab.select }}" hint-size="125px,58px">{{ tab.label }}</x-import>
+      </sc-for>
+    </x-import>
+  </div>
+  <div style="position:relative;display:flex;flex-direction:column;gap:20px;align-items:stretch;flex-shrink:0">
+    <div style="position:relative;display:flex;flex-direction:column;gap:1px;align-items:stretch;flex-shrink:0">
+      <div style="position:relative;display:flex;flex-direction:column;align-items:stretch">
+        <div style="position:relative;height:40px;display:flex;flex-direction:row;padding:8px 16px;justify-content:space-between;align-items:center;box-sizing:border-box">
+          <span style="font:700 12px/16px 'DM Sans',Arial,sans-serif;white-space:nowrap;color:#767676">View Only</span>
+          <x-import component-from-global-scope="T360Kit.IconsCustomerCardRefresh" from="./kit/inventory-kit.jsx" style="position:relative;width:24px;height:24px;flex-shrink:0" hint-size="24px,24px"></x-import>
+        </div>
+        <x-import component-from-global-scope="Tech360UILibrary_172398.Divider" hint-size="100%,1px"></x-import>
+      </div>
+      <div style="position:relative;height:57px;display:flex;flex-direction:column;justify-content:flex-start;padding:12px 18px 0 18px;box-sizing:border-box;flex-shrink:0;background-color:#FFFFFF">
+        <div style="position:relative;height:36px;border-radius:8px;background-color:#F2F2F2;display:flex;flex-direction:row;align-items:center;justify-content:space-between;padding:0 12px 0 16px;box-sizing:border-box">
+          <span style="font:400 16px/24px 'DM Sans',Arial,sans-serif;color:#767676;white-space:nowrap">Search</span>
+          <x-import component-from-global-scope="T360Kit.IconsSearchBarcode" from="./kit/inventory-kit.jsx" style="position:relative;width:24px;height:24px;flex-shrink:0" hint-size="24px,24px"></x-import>
+        </div>
+      </div>
+      <div style="padding:0 8px;flex-shrink:0">
+        <x-import component-from-global-scope="T360SecondaryTabs" from="./SecondaryTabs.jsx" selected="{{ invSegment }}" on-change="{{ setInvSegment }}" hint-size="100%,46px"></x-import>
+      </div>
+    </div>
+    <div style="position:relative;background-color:#F2F2F2;display:flex;flex-direction:column;padding:0 0 96px 0;align-items:stretch;box-sizing:border-box;flex-shrink:0">
+      <x-import component-from-global-scope="T360Kit.InventoryListOfDevicesHeader" from="./kit/inventory-kit.jsx" dc-props="{{ fill }}" style="position:relative;height:86px;flex-shrink:0;align-self:stretch;width:auto" hint-size="100%,86px"></x-import>
+      <sc-for list="{{ invDevices }}" as="d" hint-placeholder-count="3">
+        <x-import component-from-global-scope="T360Kit.InventoryListOfDevicesAll" from="./kit/inventory-kit.jsx" dc-props="{{ fill }}" style="position:relative;flex-shrink:0;align-self:stretch;width:auto" hint-size="100%,150px"></x-import>
+      </sc-for>
+    </div>
+  </div>
+</div>
+<x-import component-from-global-scope="T360Kit.Footer" from="./kit/inventory-kit.jsx" selected-button="inventory" i-o-s="ios 26" style="position:absolute;left:0;right:0;bottom:0;width:100%;height:78px;z-index:10" hint-size="100%,78px"></x-import>
+</div>
+</sc-if>
+
+<!-- iOS action sheet: contextual menu -->
+<sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+  <div style="position:absolute;inset:0;background:rgba(0,0,0,0.4);z-index:40;display:flex;flex-direction:column;justify-content:flex-end;padding:0 8px 34px;box-sizing:border-box" onClick="{{ closeMenu }}">
+    <div onClick="{{ stopClick }}" style="display:flex;flex-direction:column;gap:8px;animation:ishSheet 200ms cubic-bezier(0.4,0,0.2,1)">
+      <div style="background:rgba(242,242,242,0.94);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:14px;overflow:hidden;display:flex;flex-direction:column">
+        <div style="min-height:44px;display:flex;align-items:center;justify-content:center;padding:12px 16px;border-bottom:0.5px solid rgba(60,60,67,0.29)">
+          <span style="font:400 13px/18px -apple-system,'SF Pro Text','DM Sans',Arial,sans-serif;color:#8A8A8E">Contextual Menu</span>
+        </div>
+        <sc-for list="{{ menuItems }}" as="m" hint-placeholder-count="6">
+          <button onClick="{{ m.pick }}" style="min-height:57px;border:none;border-bottom:{{ m.rule }};background:transparent;cursor:pointer;font:400 20px/24px -apple-system,'SF Pro Text','DM Sans',Arial,sans-serif;color:#007AFF;padding:0 16px" style-active="background:rgba(0,0,0,0.06)">{{ m.label }}</button>
+        </sc-for>
+      </div>
+      <button onClick="{{ closeMenu }}" style="min-height:57px;border:none;border-radius:14px;background:#FFFFFF;cursor:pointer;font:600 20px/24px -apple-system,'SF Pro Text','DM Sans',Arial,sans-serif;color:#007AFF" style-active="background:#E8E8E8">Cancel</button>
+    </div>
+  </div>
+</sc-if>
+
+<!-- ================= SCAN TO ADD ================= -->
+<sc-if value="{{ scanScreen }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Scan to add" style="position:absolute;inset:0;display:flex;flex-direction:column;background:#000000">
+  <x-import component-from-global-scope="Tech360UILibrary_172398.StatusBar" time="3:31" dark="{{ true }}" hint-size="100%,21px"></x-import>
+  <div style="height:48px;background:#000000;display:flex;align-items:center;justify-content:space-between;padding:0 4px;flex:0 0 auto">
+    <div style="width:44px;height:44px;display:flex;align-items:center;justify-content:center">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M13 2 5 13h5l-1 9 8-11h-5l1-9Z" fill="#FFFFFF"></path></svg>
+    </div>
+    <span style="font:700 16px/24px 'Xfinity Brown','DM Sans',Arial,sans-serif;color:#FFFFFF">Scan to add</span>
+    <x-import component-from-global-scope="Tech360UILibrary_172398.IconButton" name="HeaderIconIconCloseColorWhite" tone="white" label="End session" on-click="{{ endSession }}" hint-size="44px,44px"></x-import>
+  </div>
+  <!-- camera -->
+  <div style="flex:1 1 auto;min-height:0;position:relative;background:linear-gradient(165deg,#33383F 0%,#1B1F24 48%,#0C0E11 100%);overflow:hidden;cursor:pointer" onClick="{{ tapCamera }}">
+    <div style="position:absolute;top:14px;left:50%;transform:translateX(-50%);display:flex;background:rgba(120,120,128,0.32);border-radius:9px;padding:2px;z-index:5">
+      <button onClick="{{ setModeCamera }}" style="border:none;background:{{ segBarBg }};border-radius:7px;padding:6px 18px;font:500 15px/20px 'DM Sans',Arial,sans-serif;color:{{ segBarInk }};cursor:pointer">Barcode</button>
+      <button onClick="{{ setModeQr }}" style="border:none;background:{{ segQrBg }};border-radius:7px;padding:6px 18px;font:500 15px/20px 'DM Sans',Arial,sans-serif;color:{{ segQrInk }};cursor:pointer">QR</button>
+      <button onClick="{{ setModeManual }}" style="border:none;background:{{ segManBg }};border-radius:7px;padding:6px 18px;font:500 15px/20px 'DM Sans',Arial,sans-serif;color:{{ segManInk }};cursor:pointer">Manual</button>
+    </div>
+    <sc-if value="{{ cameraMode }}" hint-placeholder-val="{{ true }}">
+    <!-- viewfinder + hint, centred in the camera area -->
+    <div style="position:absolute;top:60px;left:0;right:0;bottom:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;pointer-events:none">
+      <div style="width:{{ vfW }};height:{{ vfH }};border:{{ vfBorder }};border-radius:2px;box-sizing:border-box;transition:border-color 120ms,width 200ms cubic-bezier(0.4,0,0.2,1),height 200ms cubic-bezier(0.4,0,0.2,1)"></div>
+      <div style="background:#000000;border-radius:8px;padding:10px 20px;white-space:nowrap">
+        <span style="font:400 16px/24px 'DM Sans',Arial,sans-serif;color:#FFFFFF">{{ scanHint }}</span>
+      </div>
+      <sc-if value="{{ showTapHint }}" hint-placeholder-val="{{ true }}">
+        <span style="font:400 12px/16px 'DM Sans',Arial,sans-serif;color:rgba(255,255,255,0.55);margin-top:-8px">Tap the camera view to scan</span>
+      </sc-if>
+    </div>
+    </sc-if>
+    <sc-if value="{{ manualMode }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;top:70px;left:16px;right:16px;background:#FFFFFF;border-radius:5px;box-shadow:0 4px 8px rgba(0,0,0,0.13);padding:16px;display:flex;flex-direction:column;gap:12px;cursor:default" onClick="{{ stopClick }}">
+      <span style="font:700 16px/24px 'Xfinity Brown','DM Sans',Arial,sans-serif;color:#000000">Manual entry</span>
+      <label for="manual-barcode" style="font:400 14px/20px 'DM Sans',Arial,sans-serif;color:#767676">Enter the barcode number</label>
+      <input id="manual-barcode" value="{{ manualText }}" onChange="{{ onManualInput }}" placeholder="e.g. 3A9F22B1" style="min-height:44px;border:1px solid #767676;border-radius:4px;padding:0 12px;font:400 16px/24px 'XFINITY Standard TT','DM Sans',Arial,sans-serif;color:#000000;outline:none" style-focus="border-color:#0272B6">
+      <x-import component-from-global-scope="Tech360UILibrary_172398.Button" full-width="{{ true }}" shape="squared" disabled="{{ manualDisabled }}" on-click="{{ manualSubmit }}" hint-size="100%,55px">Add to inventory</x-import>
+    </div>
+    </sc-if>
+    <!-- loading overlay -->
+    <sc-if value="{{ saving }}" hint-placeholder-val="{{ false }}">
+      <div style="position:absolute;inset:0;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;z-index:10">
+        <div style="background:#000000;border-radius:8px;padding:16px 24px;display:flex;flex-direction:column;align-items:center;gap:10px">
+          <svg width="28" height="28" viewBox="0 0 24 24" style="animation:dcSpin 800ms linear infinite"><circle cx="12" cy="12" r="9" stroke="rgba(255,255,255,0.25)" stroke-width="3" fill="none"></circle><path d="M12 3a9 9 0 0 1 9 9" stroke="#FFFFFF" stroke-width="3" fill="none" stroke-linecap="round"></path></svg>
+          <span style="font:400 15px/20px 'DM Sans',Arial,sans-serif;color:#FFFFFF">{{ savingLabel }}</span>
+        </div>
+      </div>
+    </sc-if>
+    <!-- result strip -->
+    <sc-if value="{{ hasStrip }}" hint-placeholder-val="{{ false }}">
+      <div style="position:absolute;left:12px;right:12px;bottom:12px;animation:stripIn 160ms cubic-bezier(0,0,0.2,1);z-index:8" onClick="{{ stopClick }}">
+        <x-import component-from-global-scope="T360Toast" from="./T360Toast.jsx" variant="{{ stripVariant }}" action-label="{{ stripActionLabel }}" on-action="{{ stripAction }}" secondary-action-label="{{ stripAction2Label }}" on-secondary-action="{{ stripAction2 }}" on-close="{{ dismissStrip }}" hint-size="100%,80px"><span style="display:block;font-weight:700">{{ stripTitle }}</span><span style="display:block;white-space:pre-line">{{ stripSub }}</span></x-import>
+      </div>
+    </sc-if>
+  </div>
+
+  <!-- bottom sheet -->
+  <div style="flex:0 0 auto;background:#FFFFFF;border-radius:12px 12px 0 0;box-shadow:0 -2px 4px rgba(0,0,0,0.10),0 -8px 24px rgba(0,0,0,0.28);height:auto;max-height:{{ sheetMax }};transition:max-height 280ms cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;overflow:hidden" onPointerDown="{{ sheetDragStart }}" onPointerUp="{{ sheetDragEnd }}">
+    <sc-if value="{{ confNormal }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:8px 16px 4px;display:flex;flex-direction:column;gap:12px">
+        <div style="width:40px;height:4px;border-radius:2px;background:#D1D1D1;margin:0 auto"></div>
+        <span style="font:700 16px/24px 'Xfinity Brown','DM Sans',Arial,sans-serif;color:#000000">Add device to inventory?</span>
+        <div style="display:flex;flex-direction:column;gap:2px;border:1px solid #D1D1D1;border-radius:5px;padding:12px 16px">
+          <sc-if value="{{ confOnList }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-bottom:4px"><x-import component-from-global-scope="Tech360UILibrary_172398.Tag" color="blue" hint-size="auto,20px">{{ confRecLabel }}</x-import></div>
+          </sc-if>
+          <sc-if value="{{ confHasDetails }}" hint-placeholder-val="{{ true }}">
+            <span style="font:700 16px/24px 'DM Sans',Arial,sans-serif;color:#000000">{{ confName }}</span>
+            <span style="font:400 14px/20px 'DM Sans',Arial,sans-serif;color:#767676">{{ confType }}</span>
+          </sc-if>
+          <span style="font:400 15px/20px 'XFINITY Standard TT','DM Sans',Arial,sans-serif;color:#000000">{{ confSerial }}</span>
+          <sc-if value="{{ confSnOnly }}" hint-placeholder-val="{{ false }}">
+            <span style="font:400 14px/20px 'DM Sans',Arial,sans-serif;color:#767676">Device name and type unavailable — couldn’t reach the server.</span>
+          </sc-if>
+        </div>
+        <div style="display:flex;gap:12px">
+          <x-import component-from-global-scope="Tech360UILibrary_172398.Button" dc-props="{{ btnSecondary }}" full-width="{{ true }}" on-click="{{ cancelScan }}" hint-size="50%,55px">Cancel</x-import>
+          <x-import component-from-global-scope="Tech360UILibrary_172398.Button" shape="pill" full-width="{{ true }}" on-click="{{ confirmAdd }}" hint-size="50%,55px">Add to inventory</x-import>
+        </div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ noConfirm }}" hint-placeholder-val="{{ true }}">
+    <div style="padding:10px 20px {{ peekPadBottom }};cursor:pointer;flex:0 0 auto" onClick="{{ toggleSheet }}">
+      <div style="width:40px;height:4px;border-radius:2px;background:#D1D1D1;margin:0 auto 14px"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <div style="display:flex;flex-direction:column;gap:4px;flex:1 1 auto;min-width:0">
+          <span style="font:700 14px/20px 'DM Sans',Arial,sans-serif;color:#000000">Replenishment list</span>
+          <div style="height:5px;border-radius:3px;background:#E8E8E8;overflow:hidden"><div style="height:100%;width:{{ progressPct }};background:#0272B6;transition:width 320ms cubic-bezier(0.4,0,0.2,1)"></div></div>
+        </div>
+        <div style="display:flex;gap:6px;flex:0 0 auto;align-items:center">
+          <span style="background:{{ remainBg }};color:#FFFFFF;border-radius:12px;padding:2px 10px;font:700 13px/18px 'DM Sans',Arial,sans-serif">{{ remainLabel }}</span>
+          <sc-if value="{{ hasQueued }}" hint-placeholder-val="{{ false }}"><span style="background:#FFA700;color:#000000;border-radius:12px;padding:2px 10px;font:700 13px/18px 'DM Sans',Arial,sans-serif">{{ queuedN }} queued</span></sc-if>
+        </div>
+      </div>
+    </div>
+    <sc-if value="{{ sheetOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;border-bottom:1px solid #D1D1D1;flex:0 0 auto;animation:sheetIn 240ms cubic-bezier(0,0,0.2,1)">
+        <button onClick="{{ setTabRec }}" style="flex:1;min-height:44px;background:none;border:none;border-bottom:{{ tabRecBorder }};font:{{ tabRecFont }};color:#000000;cursor:pointer">Replenishment</button>
+        <button onClick="{{ setTabScanned }}" style="flex:1;min-height:44px;background:none;border:none;border-bottom:{{ tabScanBorder }};font:{{ tabScanFont }};color:#000000;cursor:pointer">Session summary</button>
+      </div>
+      <div class="tp-scroll" style="flex:1 1 auto;overflow-y:auto;background:#FFFFFF;animation:sheetIn 240ms cubic-bezier(0,0,0.2,1)">
+        <sc-if value="{{ tabRec }}" hint-placeholder-val="{{ true }}">
+          <sc-for list="{{ recRows }}" as="r" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid #F2F2F2;min-height:44px">
+              <div style="flex:1 1 auto;min-width:0;display:flex;flex-direction:column">
+                <span style="font:700 16px/24px 'DM Sans',Arial,sans-serif;color:#000000">{{ r.name }}</span>
+                <span style="font:400 14px/20px 'DM Sans',Arial,sans-serif;color:#767676">{{ r.type }}</span>
+              </div>
+              <sc-if value="{{ r.pending }}" hint-placeholder-val="{{ false }}"><span style="font:700 12px/16px 'DM Sans',Arial,sans-serif;color:#000000;background:#FFA700;border-radius:12px;padding:2px 8px">{{ r.pendLabel }}</span></sc-if>
+              <span style="font:400 14px/20px 'DM Sans',Arial,sans-serif;color:{{ r.countInk }};white-space:nowrap">{{ r.label }}</span>
+              <sc-if value="{{ r.done }}" hint-placeholder-val="{{ false }}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#058040"></circle><path d="m7.5 12.5 3 3 6-7" stroke="#FFFFFF" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              </sc-if>
+            </div>
+          </sc-for>
+        </sc-if>
+        <sc-if value="{{ tabScanned }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:12px 16px">
+            <span style="font:400 12px/16px 'DM Sans',Arial,sans-serif;color:#767676">Session started 09/13/26 · 3:30p</span>
+          </div>
+          <sc-if value="{{ sessionEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:24px 16px;text-align:center"><span style="font:400 14px/20px 'DM Sans',Arial,sans-serif;color:#767676">Nothing scanned yet this session.</span></div>
+          </sc-if>
+          <sc-if value="{{ hasAdded }}" hint-placeholder-val="{{ true }}">
+            <div style="background:#F2F2F2;border-top:1px solid #D1D1D1;border-bottom:1px solid #D1D1D1;padding:10px 16px"><span style="display:inline-flex;align-items:center;gap:6px;font:700 16px/24px 'DM Sans',Arial,sans-serif;color:#000000"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="flex:0 0 auto"><circle cx="12" cy="12" r="10" fill="#058040"></circle><path d="m7.5 12.5 3 3 6-7" stroke="#FFFFFF" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>Added to inventory ({{ tallyAdded }})</span></span></div>
+          </sc-if>
+          <sc-for list="{{ addedRows }}" as="s" hint-placeholder-count="2">
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid #F2F2F2;min-height:52px">
+              <span style="width:10px;height:10px;border-radius:50%;background:{{ s.dot }};flex:0 0 auto"></span>
+              <div style="flex:1 1 auto;min-width:0;display:flex;flex-direction:column">
+                <span style="font:700 15px/20px 'DM Sans',Arial,sans-serif;color:#000000">{{ s.name }}</span>
+                <span style="font:400 13px/18px 'XFINITY Standard TT','DM Sans',Arial,sans-serif;color:#767676">{{ s.serial }}</span>
+              </div>
+              <span style="flex:0 0 auto;font:700 11px/14px 'DM Sans',Arial,sans-serif;color:#FFFFFF;background:{{ s.tagBg }};border-radius:12px;padding:2px 8px">{{ s.tagLabel }}</span>
+            </div>
+          </sc-for>
+          <sc-if value="{{ hasQueuedRows }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#F2F2F2;border-top:1px solid #D1D1D1;border-bottom:1px solid #D1D1D1;margin-top:16px;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;gap:8px">
+              <span style="display:inline-flex;align-items:center;gap:6px;font:700 16px/24px 'DM Sans',Arial,sans-serif;color:#000000"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="flex:0 0 auto"><circle cx="12" cy="12" r="9" stroke="#000000" stroke-width="2"></circle><path d="M12 7v5l3 2" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>Queued for later ({{ queuedN }})</span></span>
+              <button onClick="{{ syncAll }}" style="min-height:40px;padding:0 4px;border:none;background:transparent;display:inline-flex;align-items:center;gap:6px;font:700 13px/18px 'DM Sans',Arial,sans-serif;color:#0272B6;cursor:pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 12a8 8 0 0 1-14.3 4.9M4 12a8 8 0 0 1 14.3-4.9" stroke="#0272B6" stroke-width="2" stroke-linecap="round"></path><path d="M18.5 3v4.2h-4.2M5.5 21v-4.2h4.2" stroke="#0272B6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>Sync all</button>
+            </div>
+            <sc-for list="{{ queuedRows }}" as="s" hint-placeholder-count="1">
+              <div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid #F2F2F2;min-height:52px">
+                <span style="width:10px;height:10px;border-radius:50%;background:{{ s.dot }};flex:0 0 auto"></span>
+                <div style="flex:1 1 auto;min-width:0;display:flex;flex-direction:column">
+                  <span style="font:700 15px/20px 'DM Sans',Arial,sans-serif;color:#000000">{{ s.name }}</span>
+                  <span style="font:400 13px/18px 'XFINITY Standard TT','DM Sans',Arial,sans-serif;color:#767676">{{ s.serial }}</span>
+                </div>
+                <span style="flex:0 0 auto;font:700 11px/14px 'DM Sans',Arial,sans-serif;color:#FFFFFF;background:{{ s.tagBg }};border-radius:12px;padding:2px 8px">{{ s.tagLabel }}</span>
+              </div>
+            </sc-for>
+          </sc-if>
+        </sc-if>
+      </div>
+      <div style="flex:0 0 auto;padding:12px 16px 4px;border-top:1px solid #D1D1D1;display:flex;flex-direction:column;gap:10px">
+        <x-import component-from-global-scope="Tech360UILibrary_172398.Button" full-width="{{ true }}" shape="pill" on-click="{{ toggleSheet }}" hint-size="100%,55px">Resume scanning</x-import>
+      </div>
+    </sc-if>
+    </sc-if>
+    <div style="flex:0 0 auto">
+      <x-import component-from-global-scope="Tech360UILibrary_172398.HomeIndicator" mode="light" hint-size="100%,34px"></x-import>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<!-- ================= SCAN SESSION SUMMARY ================= -->
+<sc-if value="{{ summaryScreen }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Scan Session Summary" style="position:absolute;inset:0;display:flex;flex-direction:column;background:#FFFFFF">
+  <div style="background:#FFFFFF;flex:0 0 auto">
+    <x-import component-from-global-scope="Tech360UILibrary_172398.StatusBar" time="3:42" hint-size="100%,21px"></x-import>
+    <div style="height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 4px;border-bottom:1px solid #D1D1D1">
+      <span style="width:44px"></span>
+      <span style="font:700 16px/24px 'Xfinity Brown','DM Sans',Arial,sans-serif;color:#000000">Scan Session Summary</span>
+      <span style="width:44px"></span>
+    </div>
+  </div>
+  <div class="tp-scroll" style="flex:1 1 auto;overflow-y:auto;scrollbar-width:none;padding:16px;display:flex;flex-direction:column;gap:16px">
+    <p style="margin:0;font:400 14px/20px 'DM Sans',Arial,sans-serif;color:#000000;text-wrap:pretty">Your scan session has ended, here is a summary for your reference. You can always find Queued Actions in Inventory contextual menu.</p>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin:-4px 0">
+      <span style="font:700 14px/20px 'DM Sans',Arial,sans-serif;color:#000000">Session on 09/13/26 3:30p - 3:42p</span>
+      <button onClick="{{ shareSummary }}" style="flex:0 0 auto;min-height:44px;padding:0 4px;border:none;background:transparent;display:inline-flex;align-items:center;gap:6px;font:700 13px/18px 'DM Sans',Arial,sans-serif;color:#0272B6;cursor:pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 15V3M7.5 7.5 12 3l4.5 4.5" stroke="#0272B6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M8 11H6a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-2" stroke="#0272B6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>Share</button>
+    </div>
+    <div style="background:#FFFFFF;border-radius:5px;box-shadow:0px 2px 4px 0px rgba(0,0,0,0.1773);overflow:hidden;padding-bottom:4px;flex:0 0 auto">
+      <sc-if value="{{ sessionEmpty }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:24px 16px;text-align:center"><span style="font:400 14px/20px 'DM Sans',Arial,sans-serif;color:#767676">Nothing scanned this session.</span></div>
+      </sc-if>
+      <sc-if value="{{ hasAdded }}" hint-placeholder-val="{{ true }}">
+        <div style="background:#F2F2F2;border-top:1px solid #D1D1D1;border-bottom:1px solid #D1D1D1;padding:10px 16px"><span style="display:inline-flex;align-items:center;gap:6px;font:700 16px/24px 'DM Sans',Arial,sans-serif;color:#000000"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="flex:0 0 auto"><circle cx="12" cy="12" r="10" fill="#058040"></circle><path d="m7.5 12.5 3 3 6-7" stroke="#FFFFFF" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>Added to inventory ({{ tallyAdded }})</span></span></div>
+      </sc-if>
+      <sc-for list="{{ addedRows }}" as="s" hint-placeholder-count="2">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid #F2F2F2;min-height:52px">
+          <span style="width:10px;height:10px;border-radius:50%;background:{{ s.dot }};flex:0 0 auto"></span>
+          <div style="flex:1 1 auto;min-width:0;display:flex;flex-direction:column">
+            <span style="font:700 15px/20px 'DM Sans',Arial,sans-serif;color:#000000">{{ s.name }}</span>
+            <span style="font:400 13px/18px 'XFINITY Standard TT','DM Sans',Arial,sans-serif;color:#767676">{{ s.serial }}</span>
+          </div>
+          <span style="flex:0 0 auto;font:700 11px/14px 'DM Sans',Arial,sans-serif;color:#FFFFFF;background:{{ s.tagBg }};border-radius:12px;padding:2px 8px">{{ s.tagLabel }}</span>
+        </div>
+      </sc-for>
+      <sc-if value="{{ hasQueuedRows }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#F2F2F2;border-top:1px solid #D1D1D1;border-bottom:1px solid #D1D1D1;margin-top:16px;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;gap:8px">
+          <span style="display:inline-flex;align-items:center;gap:6px;font:700 16px/24px 'DM Sans',Arial,sans-serif;color:#000000"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="flex:0 0 auto"><circle cx="12" cy="12" r="9" stroke="#000000" stroke-width="2"></circle><path d="M12 7v5l3 2" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>Queued for later ({{ queuedN }})</span></span>
+          <button onClick="{{ syncAll }}" style="min-height:40px;padding:0 4px;border:none;background:transparent;display:inline-flex;align-items:center;gap:6px;font:700 13px/18px 'DM Sans',Arial,sans-serif;color:#0272B6;cursor:pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 12a8 8 0 0 1-14.3 4.9M4 12a8 8 0 0 1 14.3-4.9" stroke="#0272B6" stroke-width="2" stroke-linecap="round"></path><path d="M18.5 3v4.2h-4.2M5.5 21v-4.2h4.2" stroke="#0272B6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>Sync all</button>
+        </div>
+        <sc-for list="{{ queuedRows }}" as="s" hint-placeholder-count="1">
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid #F2F2F2;min-height:52px">
+            <span style="width:10px;height:10px;border-radius:50%;background:{{ s.dot }};flex:0 0 auto"></span>
+            <div style="flex:1 1 auto;min-width:0;display:flex;flex-direction:column">
+              <span style="font:700 15px/20px 'DM Sans',Arial,sans-serif;color:#000000">{{ s.name }}</span>
+              <span style="font:400 13px/18px 'XFINITY Standard TT','DM Sans',Arial,sans-serif;color:#767676">{{ s.serial }}</span>
+            </div>
+            <span style="flex:0 0 auto;font:700 11px/14px 'DM Sans',Arial,sans-serif;color:#FFFFFF;background:{{ s.tagBg }};border-radius:12px;padding:2px 8px">{{ s.tagLabel }}</span>
+          </div>
+        </sc-for>
+      </sc-if>
+    </div>
+  </div>
+  <div style="flex:0 0 auto;background:#FFFFFF;border-top:1px solid #D1D1D1;padding:12px 16px 4px;display:flex">
+    <x-import component-from-global-scope="Tech360UILibrary_172398.Button" size="large" shape="pill" full-width="{{ true }}" on-click="{{ doneSession }}" hint-size="100%,55px">Done</x-import>
+  </div>
+  <div style="flex:0 0 auto;background:#FFFFFF">
+    <x-import component-from-global-scope="Tech360UILibrary_172398.HomeIndicator" mode="light" hint-size="100%,34px"></x-import>
+  </div>
+</div>
+</sc-if>
+
+<!-- ================= END OF PROTOTYPE ================= -->
+<sc-if value="{{ endScreen }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="End of prototype" style="position:absolute;inset:0;background:#FFFFFF;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:32px;box-sizing:border-box;text-align:center">
+  <svg width="56" height="56" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#058040"></circle><path d="m7 12.5 3.4 3.5L17 8.5" stroke="#FFFFFF" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+  <span style="font:700 22px/28px 'Xfinity Brown','DM Sans',Arial,sans-serif;color:#000000">End of prototype</span>
+  <span style="font:400 15px/22px 'DM Sans',Arial,sans-serif;color:#767676;max-width:280px;text-wrap:pretty">Thanks — you’ve completed this task. Please let the moderator know you’re done.</span>
+  <button onClick="{{ restart }}" style="margin-top:16px;min-height:44px;padding:0 16px;border:none;background:transparent;font:700 14px/20px 'DM Sans',Arial,sans-serif;color:#0272B6;cursor:pointer">Start over</button>
+</div>
+</sc-if>
+
+<!-- full-page loading (outside the scan screen) -->
+<sc-if value="{{ pageSaving }}" hint-placeholder-val="{{ false }}">
+  <div style="position:absolute;inset:0;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;z-index:65">
+    <div style="background:#000000;border-radius:8px;padding:16px 24px;display:flex;flex-direction:column;align-items:center;gap:10px">
+      <svg width="28" height="28" viewBox="0 0 24 24" style="animation:dcSpin 800ms linear infinite"><circle cx="12" cy="12" r="9" stroke="rgba(255,255,255,0.25)" stroke-width="3" fill="none"></circle><path d="M12 3a9 9 0 0 1 9 9" stroke="#FFFFFF" stroke-width="3" fill="none" stroke-linecap="round"></path></svg>
+      <span style="font:400 15px/20px 'DM Sans',Arial,sans-serif;color:#FFFFFF">{{ savingLabel }}</span>
+    </div>
+  </div>
+</sc-if>
+
+<!-- iOS share sheet -->
+<sc-if value="{{ shareOpen }}" hint-placeholder-val="{{ false }}">
+  <div style="position:absolute;inset:0;background:rgba(0,0,0,0.4);z-index:70;display:flex;flex-direction:column;justify-content:flex-end" onClick="{{ closeShare }}">
+    <div onClick="{{ stopClick }}" style="background:#F2F2F7;border-radius:13px 13px 0 0;padding:8px 0 0;display:flex;flex-direction:column;gap:16px;animation:sheetIn 240ms cubic-bezier(0,0,0.2,1)">
+      <div style="width:36px;height:5px;border-radius:3px;background:rgba(60,60,67,0.3);align-self:center"></div>
+      <div style="display:flex;align-items:center;gap:12px;padding:0 16px">
+        <span style="flex:0 0 auto;width:44px;height:52px;border-radius:6px;background:#FFFFFF;box-shadow:0 0 0 0.5px rgba(0,0,0,0.15);display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0272B6" stroke-width="1.8" stroke-linecap="round"><path d="M8 7h8M8 11h8M8 15h5"></path></svg></span>
+        <div style="flex:1 1 auto;min-width:0;display:flex;flex-direction:column">
+          <span style="font:600 15px/20px -apple-system,'SF Pro Text','DM Sans',Arial,sans-serif;color:#000000">Scan Session Summary</span>
+          <span style="font:400 13px/18px -apple-system,'SF Pro Text','DM Sans',Arial,sans-serif;color:#8E8E93">09/13/26 3:30p - 3:42p · PDF</span>
+        </div>
+        <button onClick="{{ closeShare }}" aria-label="Close" style="flex:0 0 auto;width:30px;height:30px;border-radius:50%;border:none;background:rgba(118,118,128,0.12);cursor:pointer;display:flex;align-items:center;justify-content:center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8E8E93" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg></button>
+      </div>
+      <div style="height:0.5px;background:rgba(60,60,67,0.29)"></div>
+      <div style="display:flex;gap:4px;padding:0 12px;overflow-x:auto;scrollbar-width:none">
+        <button onClick="{{ shareMessages }}" style="flex:0 0 auto;width:72px;border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;padding:0">
+          <span style="width:60px;height:60px;border-radius:14px;background:linear-gradient(#5DF777,#0ABE34);display:flex;align-items:center;justify-content:center"><svg width="34" height="34" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M12 3C6.5 3 2 6.6 2 11c0 2.4 1.3 4.6 3.4 6.1L4.5 21l4.2-2.2c1 .3 2.1.4 3.3.4 5.5 0 10-3.6 10-8.1S17.5 3 12 3z"></path></svg></span>
+          <span style="font:400 11px/13px -apple-system,'SF Pro Text','DM Sans',Arial,sans-serif;color:#000000;text-align:center;white-space:nowrap">Messages</span>
+        </button>
+        <button onClick="{{ shareMail }}" style="flex:0 0 auto;width:72px;border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;padding:0">
+          <span style="width:60px;height:60px;border-radius:14px;background:linear-gradient(#53B6FA,#1E73F0);display:flex;align-items:center;justify-content:center"><svg width="34" height="34" viewBox="0 0 24 24" fill="none"><rect x="3" y="5.5" width="18" height="13" rx="2" fill="#FFFFFF"></rect><path d="m3.8 6.6 8.2 6.4 8.2-6.4" stroke="#2B8CF6" stroke-width="1.6" stroke-linejoin="round"></path></svg></span>
+          <span style="font:400 11px/13px -apple-system,'SF Pro Text','DM Sans',Arial,sans-serif;color:#000000;text-align:center;white-space:nowrap">Mail</span>
+        </button>
+        <button onClick="{{ shareNotes }}" style="flex:0 0 auto;width:72px;border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;padding:0">
+          <span style="width:60px;height:60px;border-radius:14px;background:#FFFFFF;display:flex;align-items:center;justify-content:center"><svg width="34" height="34" viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="16" height="18" rx="2.5" fill="#FFFFFF"></rect><rect x="4" y="3" width="16" height="5" rx="2.5" fill="#FFD43B"></rect><path d="M7 12h10M7 15h10M7 18h6" stroke="#C7C7CC" stroke-width="1.2" stroke-linecap="round"></path></svg></span>
+          <span style="font:400 11px/13px -apple-system,'SF Pro Text','DM Sans',Arial,sans-serif;color:#000000;text-align:center;white-space:nowrap">Notes</span>
+        </button>
+      </div>
+      <div style="margin:0 16px;border-radius:10px;overflow:hidden;display:flex;flex-direction:column">
+        <button onClick="{{ shareCopy }}" style="width:100%;min-height:48px;border:none;border-bottom:0.5px solid rgba(60,60,67,0.29);background:#FFFFFF;cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font:400 17px/22px -apple-system,'SF Pro Text','DM Sans',Arial,sans-serif;color:#000000">Copy<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.6"><rect x="8" y="8" width="12" height="12" rx="2"></rect><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path></svg></button>
+        <button onClick="{{ shareFiles }}" style="width:100%;min-height:48px;border:none;background:#FFFFFF;cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font:400 17px/22px -apple-system,'SF Pro Text','DM Sans',Arial,sans-serif;color:#000000">Save to Files<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.6" stroke-linejoin="round"><path d="M3 6a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></button>
+      </div>
+      <div style="height:34px"></div>
+    </div>
+  </div>
+</sc-if>
+
+<!-- exit scan session confirmation -->
+<sc-if value="{{ exitOpen }}" hint-placeholder-val="{{ false }}">
+  <div style="position:absolute;inset:0;background:rgba(0,0,0,0.4);z-index:60;display:flex;align-items:center;justify-content:center;padding:16px" onClick="{{ cancelExit }}">
+    <div onClick="{{ stopClick }}" style="max-width:100%">
+      <x-import component="T360Dialog" from="./T360Dialog.jsx" tone="alert" headline="End scanning session?" checkboxes="{{ exitCheckboxes }}" primary-label="Exit" on-primary="{{ exitConfirm }}" on-close="{{ cancelExit }}" hint-size="343px,420px">Your scan session will end when you exit this screen. You can find your queued actions (if there's any) in the inventory contextual menu.</x-import>
+    </div>
+  </div>
+</sc-if>
+
+<!-- toast -->
+<sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+  <div style="position:absolute;top:{{ toastTop }};bottom:{{ toastBottom }};left:12px;right:12px;animation:toastIn 160ms cubic-bezier(0,0,0.2,1);z-index:75">
+    <x-import component-from-global-scope="T360Toast" from="./T360Toast.jsx" variant="default" show-icon="{{ false }}" on-close="{{ dismissToast }}" hint-size="100%,56px">{{ toastMsg }}</x-import>
+  </div>
+</sc-if>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = this.freshState();
+    this.timers = [];
+  }
+  freshState() {
+    return {
+      screen: 'inv', invTab: 0, invSegment: 0, menuOpen: false,
+      sheetOpen: false, tab: 'rec', saving: false, savingLabel: 'Adding to inventory…', confirm: null, mode: 'camera', manualText: '',
+      session: [], strip: null, flash: '', toast: null, step: 0, iid: 0,
+      exitOpen: false, exitDontShow: false, shareOpen: false,
+    };
+  }
+  componentWillUnmount() { this.timers.forEach(clearTimeout); }
+  later(fn, ms) { this.timers.push(setTimeout(fn, ms)); }
+
+  static REC = [
+    { id: 'xb8', name: 'XB8 Gateway', type: 'Gateway', qty: 3 },
+    { id: 'xi6', name: 'Xi6 Streaming Box', type: 'Streaming box', qty: 4 },
+    { id: 'xr16', name: 'XR16 Voice Remote', type: 'Remote', qty: 2 },
+    { id: 'poe', name: 'X1 SIK POE Filter', type: 'Filter', qty: 2 },
+  ];
+  // Scripted test sequence: 1 on-list match, 2 off-list device, 3 server write failure
+  static SEQ = [
+    { kind: 'ok', recId: 'xb8', serial: 'SN 3A9F2014' },
+    { kind: 'ok', recId: null, name: 'Arlo Essential Camera', type: 'Camera', serial: 'SN AR552015' },
+    { kind: 'server', recId: 'xi6', realName: 'Xi6 Streaming Box', serial: 'SN 7C1D0016' },
+  ];
+
+  beep(good) {
+    try {
+      const ctx = (this.actx = this.actx || new (window.AudioContext || window.webkitAudioContext)());
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.frequency.value = good ? 1046 : 220; o.type = 'sine';
+      g.gain.setValueAtTime(0.08, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + (good ? 0.12 : 0.25));
+      o.connect(g); g.connect(ctx.destination); o.start(); o.stop(ctx.currentTime + 0.3);
+    } catch (e) {}
+  }
+  buzz(ms) { try { if (navigator.vibrate) navigator.vibrate(ms); } catch (e) {} }
+  doFlash(tone) {
+    this.setState({ flash: tone });
+    this.later(() => this.setState({ flash: '' }), 600);
+  }
+  componentDidUpdate() {
+    const strip = this.state.strip;
+    if (strip === this._lastStrip) return;
+    this._lastStrip = strip;
+    if (strip && strip.tone === 'success') {
+      this.later(() => this.setState(s => (s.strip === strip ? { strip: null } : null)), 8000);
+    }
+  }
+  showToast(msg) {
+    this.setState({ toast: msg });
+    this.later(() => this.setState(s => (s.toast === msg ? { toast: null } : null)), 2600);
+  }
+  recOf(id) { return Component.REC.find(r => r.id === id); }
+
+  scan(serialOverride) {
+    const S = this.state;
+    if (S.saving || S.confirm || S.step >= Component.SEQ.length) return;
+    const spec = Component.SEQ[S.step];
+    const rec = this.recOf(spec.recId) || {};
+    const serial = serialOverride || spec.serial;
+    const server = spec.kind === 'server';
+    const name = server ? '' : (spec.name || rec.name);
+    const type = server ? '' : (spec.type || rec.type);
+    this.setState({ strip: null, sheetOpen: false, saving: true, savingLabel: 'Capturing scanned item info…' });
+    this.later(() => {
+      this.doFlash('warn'); this.beep(true); this.buzz(30);
+      this.setState({ saving: false, savingLabel: 'Adding to inventory…', confirm: { spec: { ...spec, serial }, name, type, serial } });
+    }, 650);
+  }
+  confirmAdd = () => {
+    const c = this.state.confirm; if (!c) return;
+    this.setState({ confirm: null, saving: true, savingLabel: 'Adding to inventory…' });
+    this.later(() => { this.setState({ saving: false }); this.resolveScan(c.spec); }, 1500);
+  };
+  cancelScan = () => this.setState({ confirm: null });
+  resolveScan(spec) {
+    const id = this.state.iid + 1;
+    this.setState(s => ({ iid: id, step: s.step + 1 }));
+    if (spec.kind === 'server') {
+      const item = { id, name: 'Unidentified device', serial: spec.serial, recId: null, realName: spec.realName, realRecId: spec.recId, status: 'failed' };
+      this.setState(s => ({ session: [...s.session, item] }));
+      this.doFlash('error'); this.beep(false); this.buzz([60, 60, 60]);
+      this.setState({ strip: { tone: 'error', title: "Couldn't save — server error", sub: spec.serial + ' · device details unavailable · not in your inventory', action: 'retry', action2: 'queue', itemId: id } });
+      return;
+    }
+    const name = spec.name || (this.recOf(spec.recId) || {}).name;
+    const item = { id, name, serial: spec.serial, recId: spec.recId || null, status: 'added' };
+    this.setState(s => ({ session: [...s.session, item] }));
+    this.doFlash('success'); this.beep(true); this.buzz(40);
+    this.setState({ strip: { tone: 'success', title: name + ' added', sub: spec.serial + ' is in your inventory', action: null, itemId: id } });
+  }
+  update(id, patch) { this.setState(s => ({ session: s.session.map(i => i.id === id ? { ...i, ...patch } : i) })); }
+  // Retry: server still failing in this test scenario
+  retry(id) {
+    const it = this.state.session.find(i => i.id === id); if (!it || this.state.saving) return;
+    this.setState({ saving: true, savingLabel: 'Adding to inventory…', strip: null });
+    this.later(() => {
+      this.setState({ saving: false });
+      this.doFlash('error'); this.beep(false); this.buzz([60, 60, 60]);
+      this.setState({ strip: { tone: 'error', title: "Couldn't save — server error", sub: it.serial + ' · device details unavailable · not in your inventory', action: 'retry', action2: 'queue', itemId: id } });
+    }, 1500);
+  }
+  queueLater(id) {
+    const it = this.state.session.find(i => i.id === id); if (!it) return;
+    this.update(id, { status: 'pending' });
+    this.doFlash('warn');
+    this.setState({ strip: { tone: 'pending', title: 'Queued — not in inventory yet', sub: it.serial + ' · retries with next sync', action: null, itemId: id } });
+  }
+  identify(i) { return i.realName ? { ...i, name: i.realName, recId: i.realRecId, realName: undefined, realRecId: undefined } : i; }
+  syncAll() {
+    const S = this.state;
+    if (S.saving) return;
+    const n = S.session.filter(i => i.status === 'pending').length; if (!n) return;
+    this.setState({ saving: true, savingLabel: 'Syncing ' + n + ' queued scan' + (n === 1 ? '' : 's') + '…', sheetOpen: false, strip: null });
+    this.later(() => {
+      this.setState(s => ({ saving: false, savingLabel: 'Adding to inventory…', session: s.session.map(i => i.status === 'pending' ? { ...this.identify(i), status: 'added' } : i) }));
+      if (this.state.screen === 'scan') {
+        this.beep(true); this.doFlash('success');
+        this.setState({ strip: { tone: 'success', title: n + ' device' + (n === 1 ? '' : 's') + ' added to your inventory', sub: 'Queued scans synced to EIS', action: null } });
+      } else this.showToast(n + ' queued device' + (n === 1 ? '' : 's') + ' synced to your inventory');
+    }, 1800);
+  }
+
+  renderVals() {
+    const S = this.state, session = S.session;
+    const counts = id => ({
+      added: session.filter(i => i.recId === id && i.status === 'added').length,
+      pending: session.filter(i => (i.recId === id || i.realRecId === id) && i.status === 'pending').length,
+    });
+    const recRows = Component.REC.map(r => {
+      const c = counts(r.id), done = c.added >= r.qty;
+      const remaining = Math.max(r.qty - c.added, 0);
+      return { name: r.name, type: r.type, label: done ? 'Done' : 'Need ' + remaining + ' more', done, pending: c.pending > 0, pendLabel: '+' + c.pending + ' queued', countInk: done ? '#058040' : '#000000' };
+    });
+    const totQty = Component.REC.reduce((a, r) => a + r.qty, 0);
+    const totAddedOnList = Component.REC.reduce((a, r) => a + Math.min(counts(r.id).added, r.qty), 0);
+    const tallyAdded = session.filter(i => i.status === 'added').length;
+    const queuedN = session.filter(i => i.status === 'pending').length;
+    const statusDot = { added: '#058040', pending: '#FFA700', failed: '#C90318' };
+    const mkRow = i => ({ name: i.name, serial: i.serial, dot: statusDot[i.status] || '#767676', tagLabel: i.recId ? 'On list' : 'Off-list', tagBg: i.recId ? '#0272B6' : '#767676' });
+    const addedRows = [...session].reverse().filter(i => i.status === 'added').map(mkRow);
+    const queuedRows = [...session].reverse().filter(i => i.status === 'pending').map(mkRow);
+    const strip = S.strip;
+    const actLabels = { retry: 'Retry', queue: 'Queue for later' };
+    const actFns = { retry: id => this.retry(id), queue: id => this.queueLater(id) };
+    const flashColors = { success: '3px solid #4CD964', error: '3px solid #FF3B30', warn: '3px solid #FFA700' };
+    const scanFresh = { sheetOpen: false, tab: 'rec', saving: false, confirm: null, mode: 'camera', manualText: '', session: [], strip: null, flash: '', step: 0, iid: 0, exitOpen: false, exitDontShow: false };
+    const via = t => () => { this.setState({ shareOpen: false }); this.showToast(t); };
+    const onInv = S.screen === 'inv';
+    return {
+      invScreen: onInv, scanScreen: S.screen === 'scan', summaryScreen: S.screen === 'summary', endScreen: S.screen === 'end',
+      // landing
+      invTabs: ['All', 'Today', 'Replenish (15)'].map((label, i) => ({ label, selected: i === S.invTab, select: () => this.setState({ invTab: i }) })),
+      invSegment: S.invSegment, setInvSegment: i => this.setState({ invSegment: i }),
+      invDevices: [{ id: 0 }, { id: 1 }, { id: 2 }],
+      fill: { style: { width: '100%', alignSelf: 'stretch', boxSizing: 'border-box' } },
+      menuOpen: !!S.menuOpen,
+      openMenu: () => this.setState({ menuOpen: true, toast: null }),
+      closeMenu: () => this.setState({ menuOpen: false }),
+      menuItems: ['Call TCoE', 'Reconcile Equipment', 'Add Equipment to Inventory', 'Return Equipment', 'Queued Actions', 'Report a Tech360 Issue'].map((label, i, arr) => ({
+        label, rule: i < arr.length - 1 ? '0.5px solid rgba(60,60,67,0.29)' : 'none',
+        pick: () => label === 'Add Equipment to Inventory'
+          ? this.setState({ ...scanFresh, menuOpen: false, toast: null, screen: 'scan' })
+          : (this.setState({ menuOpen: false }), this.showToast('“' + label + '” isn’t part of this prototype')),
+      })),
+      // scan screen
+      saving: S.saving && S.screen === 'scan', pageSaving: S.saving && S.screen !== 'scan', savingLabel: S.savingLabel,
+      confNormal: !!S.confirm,
+      noConfirm: !S.confirm,
+      confName: S.confirm ? S.confirm.name : '', confType: S.confirm ? S.confirm.type : '', confSerial: S.confirm ? S.confirm.serial : '',
+      confHasDetails: !!(S.confirm && S.confirm.name), confSnOnly: !!(S.confirm && !S.confirm.name),
+      confOnList: !!(S.confirm && S.confirm.spec.recId && S.confirm.spec.kind === 'ok'),
+      confRecLabel: (() => {
+        if (!S.confirm || !S.confirm.spec.recId) return '';
+        const r = this.recOf(S.confirm.spec.recId); if (!r) return '';
+        const rem = Math.max(r.qty - counts(r.id).added, 0);
+        return rem > 0 ? rem + ' more recommended' : 'Replenishment already met';
+      })(),
+      confirmAdd: this.confirmAdd, cancelScan: this.cancelScan,
+      vfBorder: flashColors[S.flash] || '1.5px solid #F7E017',
+      vfW: S.mode === 'qr' ? '200px' : 'calc(100% - 56px)',
+      vfH: S.mode === 'qr' ? '200px' : '150px',
+      scanHint: S.mode === 'qr' ? 'Center the QR code to scan' : 'Center the barcode to scan',
+      showTapHint: S.step < Component.SEQ.length && !S.confirm,
+      hasStrip: !!strip,
+      stripVariant: strip ? ({ success: 'default', error: 'error', warn: 'warning', pending: 'warning' })[strip.tone] || 'default' : 'default',
+      stripTitle: strip ? strip.title : '', stripSub: strip ? strip.sub : '',
+      stripActionLabel: strip && strip.action ? actLabels[strip.action] : '',
+      stripAction: e => { if (e && e.stopPropagation) e.stopPropagation(); const st = this.state.strip; if (st && st.action) actFns[st.action](st.itemId); },
+      stripAction2Label: strip && strip.action2 ? actLabels[strip.action2] : '',
+      stripAction2: e => { if (e && e.stopPropagation) e.stopPropagation(); const st = this.state.strip; if (st && st.action2) actFns[st.action2](st.itemId); },
+      dismissStrip: e => { if (e && e.stopPropagation) e.stopPropagation(); this.setState({ strip: null }); },
+      stopClick: e => e.stopPropagation(),
+      peekPadBottom: S.sheetOpen ? '16px' : '4px',
+      sheetOpen: S.sheetOpen, sheetMax: S.confirm ? '354px' : S.sheetOpen ? 'calc(100% - 110px)' : '134px',
+      toggleSheet: e => { if (e && e.stopPropagation) e.stopPropagation(); this.setState(s => ({ sheetOpen: !s.sheetOpen })); },
+      tabRec: S.tab === 'rec', tabScanned: S.tab === 'scanned',
+      setTabRec: () => this.setState({ tab: 'rec' }),
+      setTabScanned: () => this.setState({ tab: 'scanned' }),
+      tabRecBorder: S.tab === 'rec' ? '4px solid #0272B6' : '4px solid transparent',
+      tabScanBorder: S.tab === 'scanned' ? '4px solid #0272B6' : '4px solid transparent',
+      tabRecFont: (S.tab === 'rec' ? '700' : '400') + " 15px/20px 'DM Sans',Arial,sans-serif",
+      tabScanFont: (S.tab === 'scanned' ? '700' : '400') + " 15px/20px 'DM Sans',Arial,sans-serif",
+      recRows,
+      progressPct: Math.round((totAddedOnList / totQty) * 100) + '%',
+      remainLabel: totQty - totAddedOnList > 0 ? 'Need ' + (totQty - totAddedOnList) + ' more' : 'List complete',
+      remainBg: totQty - totAddedOnList > 0 ? '#0272B6' : '#058040',
+      addedRows, hasAdded: addedRows.length > 0,
+      queuedRows, hasQueuedRows: queuedRows.length > 0,
+      tallyAdded, queuedN, hasQueued: queuedN > 0,
+      sessionEmpty: addedRows.length === 0 && queuedRows.length === 0,
+      syncAll: e => { if (e && e.stopPropagation) e.stopPropagation(); this.syncAll(); },
+      cameraMode: S.mode === 'camera' || S.mode === 'qr', manualMode: S.mode === 'manual',
+      segBarBg: S.mode === 'camera' ? '#FFFFFF' : 'transparent', segBarInk: S.mode === 'camera' ? '#000000' : '#FFFFFF',
+      segQrBg: S.mode === 'qr' ? '#FFFFFF' : 'transparent', segQrInk: S.mode === 'qr' ? '#000000' : '#FFFFFF',
+      segManBg: S.mode === 'manual' ? '#FFFFFF' : 'transparent', segManInk: S.mode === 'manual' ? '#000000' : '#FFFFFF',
+      setModeCamera: e => { e.stopPropagation(); this.setState({ mode: 'camera' }); },
+      setModeQr: e => { e.stopPropagation(); this.setState({ mode: 'qr' }); },
+      setModeManual: e => { e.stopPropagation(); this.setState({ mode: 'manual' }); },
+      tapCamera: () => {
+        if (this.state.sheetOpen) { this.setState({ sheetOpen: false }); return; }
+        if (this.state.mode === 'camera' || this.state.mode === 'qr') this.scan();
+      },
+      sheetDragStart: e => { this._dragY = e.clientY; },
+      sheetDragEnd: e => { if (this.state.sheetOpen && this._dragY != null && e.clientY - this._dragY > 30) this.setState({ sheetOpen: false }); this._dragY = null; },
+      manualText: S.manualText,
+      onManualInput: e => this.setState({ manualText: e.target.value }),
+      manualDisabled: !S.manualText.trim(),
+      manualSubmit: e => {
+        if (e && e.stopPropagation) e.stopPropagation();
+        const t = this.state.manualText.trim(); if (!t) return;
+        const up = t.toUpperCase();
+        this.setState({ manualText: '', mode: 'camera' });
+        this.scan(up.startsWith('SN ') ? up : 'SN ' + up);
+      },
+      // exit + summary
+      endSession: () => this.setState({ exitOpen: true, exitDontShow: false, sheetOpen: false }),
+      exitOpen: !!S.exitOpen,
+      exitCheckboxes: [{ label: 'Don’t show this again', checked: !!S.exitDontShow, onChange: () => this.setState(s => ({ exitDontShow: !s.exitDontShow })) }],
+      cancelExit: () => this.setState({ exitOpen: false }),
+      exitConfirm: () => this.setState({ exitOpen: false, screen: 'summary', strip: null, sheetOpen: false, confirm: null, saving: false }),
+      doneSession: () => this.setState({ screen: 'end', toast: null, shareOpen: false }),
+      shareSummary: e => { if (e && e.stopPropagation) e.stopPropagation(); this.setState({ shareOpen: true }); },
+      shareOpen: !!S.shareOpen,
+      closeShare: () => this.setState({ shareOpen: false }),
+      shareMessages: via('Summary shared via Messages'), shareMail: via('Summary shared via Mail'), shareNotes: via('Summary saved to Notes'),
+      shareCopy: via('Summary copied'), shareFiles: via('Summary saved to Files'),
+      restart: () => { this.timers.forEach(clearTimeout); this.timers = []; this.setState(this.freshState()); },
+      btnSecondary: { style: 'outline', size: 'large', shape: 'pill', color: 'theme' },
+      hasToast: !!S.toast, toastMsg: S.toast || '',
+      toastTop: onInv ? 'auto' : '76px', toastBottom: onInv ? '96px' : 'auto',
+      dismissToast: e => { if (e && e.stopPropagation) e.stopPropagation(); this.setState({ toast: null }); },
+    };
+  }
+}
+</script>
+</body>
+</html>

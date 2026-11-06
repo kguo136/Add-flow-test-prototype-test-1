@@ -1,0 +1,48 @@
+/* Tech360 UI Library — spacing, radii, elevation, motion.
+   Numbers taken from the auto-layout gaps/paddings and effects in the file. */
+
+:root{
+  /* Spacing — the gap/padding values the file actually uses */
+  --sp-2:2px;  --sp-4:4px;  --sp-8:8px;  --sp-10:10px; --sp-12:12px; /* @kind spacing */
+  --sp-16:16px; --sp-20:20px; --sp-24:24px; --sp-28:28px; --sp-32:32px; /* @kind spacing */
+  --sp-48:48px; --sp-64:64px; /* @kind spacing */
+
+  /* Radii — verbatim from the components */
+  --radius-2:2px; /* @kind radius */ /* documentation "insert" panels */
+  --radius-4:4px; /* @kind radius */ /* squared button, small cards */
+  --radius-5:5px; /* @kind radius */ /* frame/card default */
+  --radius-8:8px; /* @kind radius */ /* device chip, large cards */
+  --radius-12:12px; /* @kind radius */ /* tag pill */
+  --radius-36:36px; /* @kind radius */ /* small pill button */
+  --radius-55:55px; /* @kind radius */ /* large pill button */
+  --radius-pill:999px; /* @kind radius */
+  --radius-circle:50%; /* @kind radius */
+
+  /* Borders */
+  --stroke-hairline:1px; /* @kind spacing */
+  --stroke-outline:2px; /* @kind spacing */ /* outline button ring */
+
+  /* Elevation — the shadow recipes in the file */
+  --shadow-swatch:0px 4px 4px 0px rgba(0,0,0,0.25); /* @kind shadow */
+  --shadow-card:0px 2px 4px 0px rgba(0,0,0,0.10); /* @kind shadow */
+  --shadow-raised:0px 4px 8px 0px rgba(0,0,0,0.13); /* @kind shadow */
+  --shadow-sheet:0px -2px 12px 0px rgba(0,0,0,0.13); /* @kind shadow */
+  --inset-hairline:inset 0 0 0 1px var(--border-hairline); /* @kind shadow */
+
+  /* Touch targets — iOS-first field app */
+  --touch-min:44px; /* @kind spacing */
+  --control-h-lg:55px; /* @kind spacing */
+  --control-h-sm:40px; /* @kind spacing */
+
+  /* Motion */
+  --ease-standard:cubic-bezier(0.4,0.0,0.2,1); /* @kind other */
+  --ease-out:cubic-bezier(0.0,0.0,0.2,1); /* @kind other */
+  --dur-fast:120ms; /* @kind other */
+  --dur-base:200ms; /* @kind other */
+  --dur-slow:320ms; /* @kind other */
+
+  /* Grid (from the Grid System page) */
+  --grid-columns:4; /* @kind other */
+  --grid-margin:16px; /* @kind other */
+  --grid-gutter:16px; /* @kind other */
+}

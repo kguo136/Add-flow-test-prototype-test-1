@@ -1,0 +1,27 @@
+/* Tokens used by components/kit missing from fig-tokens.css (Claude T360 Template.fig). */
+:root {
+  --background-neutral-primary: rgb(255,255,255); /* @kind color */
+  --text-fill-neutral-primary: rgb(0,0,0); /* @kind color */
+  --text-fill-neutral-secondary: rgb(118,118,118); /* @kind color */
+  --text-fill-neutral-tertiary-or-disabled: rgb(150,150,150); /* @kind color */
+  --text-fill-semantic-error: rgb(201,3,24); /* @kind color */
+  --text-fill-semantic-success: rgb(5,128,64); /* @kind color */
+  --text-fill-semantic-warning: rgb(255,167,0); /* @kind color */
+  --text-fill-theme-primary: rgb(2,114,182); /* @kind color */
+  --warning-2: rgb(255,167,0); /* @kind color */
+  --warning-3: rgb(255,167,0); /* @kind color */
+  --warning-4: rgb(255,167,0); /* @kind color */
+}
+:root[data-theme="dark"], .dark {
+  --background-neutral-primary: rgb(0,0,0); /* @kind color */
+  --text-fill-neutral-primary: rgb(255,255,255); /* @kind color */
+  --text-fill-neutral-secondary: rgb(248,248,248); /* @kind color */
+  --text-fill-neutral-tertiary-or-disabled: rgb(162,162,162); /* @kind color */
+  --text-fill-semantic-error: rgb(251,84,63); /* @kind color */
+  --text-fill-semantic-success: rgb(91,201,66); /* @kind color */
+  --text-fill-semantic-warning: rgb(254,206,0); /* @kind color */
+  --text-fill-theme-primary: rgb(43,156,216); /* @kind color */
+  --warning-2: rgb(254,206,0); /* @kind color */
+  --warning-3: rgb(254,206,0); /* @kind color */
+  --warning-4: rgb(254,206,0); /* @kind color */
+}
